@@ -1,0 +1,41 @@
+[
+  {
+    "query": "How do I create a new Kafka topic?",
+    "expected_concepts": [
+      "kafka-topics.sh",
+      "--create",
+      "partition",
+      "replication-factor"
+    ],
+    "relevant_docs": [
+      "kafka-guide.pdf"
+    ],
+    "category": "operations"
+  },
+  {
+    "query": "What are the key producer configuration properties?",
+    "expected_concepts": [
+      "acks",
+      "batch.size",
+      "linger.ms",
+      "buffer.memory"
+    ],
+    "relevant_docs": [
+      "kafka-guide.pdf"
+    ],
+    "category": "development"
+  },
+  {
+    "query": "How do I monitor Kafka cluster health?",
+    "expected_concepts": [
+      "JMX",
+      "metrics",
+      "broker",
+      "under-replicated"
+    ],
+    "relevant_docs": [
+      "kafka-guide.pdf"
+    ],
+    "category": "monitoring"
+  }
+]

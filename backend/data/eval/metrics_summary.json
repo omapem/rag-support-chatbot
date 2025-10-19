@@ -1,0 +1,22 @@
+{
+  "summary": {
+    "total_queries_evaluated": 3,
+    "evaluation_period": {
+      "first": "2025-10-19T19:16:26.595824",
+      "last": "2025-10-19T19:16:45.836906"
+    }
+  },
+  "retrieval_metrics": {
+    "avg_docs_retrieved": 25.0,
+    "avg_relevance_score": 0.6529,
+    "avg_retrieval_time_ms": 72.07
+  },
+  "generation_metrics": {
+    "avg_generation_time_ms": 9570.1,
+    "avg_total_time_ms": 9642.17
+  },
+  "quality_metrics": {
+    "avg_human_rating": null,
+    "num_human_ratings": 0
+  }
+}

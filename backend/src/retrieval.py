@@ -159,24 +159,87 @@ class Retriever:
 
         return documents
 
-    def retrieve_with_scores(self, query: str, top_k: int = None) -> List[tuple]:
+    def retrieve_with_scores(self, query: str, top_k: int = None, apply_reranking: bool = True) -> List[tuple]:
         """
-        Retrieve documents with similarity scores.
+        Retrieve documents with similarity scores and optional re-ranking.
 
         Args:
             query: User's question
             top_k: Number of documents to retrieve
+            apply_reranking: If True, apply relevance-based re-ranking
 
         Returns:
-            List of (Document, score) tuples
+            List of (Document, score) tuples sorted by relevance
         """
         top_k = top_k or settings.top_k
 
+        # Retrieve more candidates for re-ranking
+        fetch_k = top_k * 2 if apply_reranking else top_k
+
         results = self.embedding_manager.vector_store.similarity_search_with_score(
-            query, k=top_k
+            query, k=fetch_k
         )
 
+        if apply_reranking and len(results) > 0:
+            results = self._rerank_results(query, results, top_k)
+
         return results
+
+    def _rerank_results(self, query: str, results: List[tuple], top_k: int) -> List[tuple]:
+        """
+        Re-rank results based on multiple relevance signals.
+
+        Args:
+            query: Original query
+            results: Initial (Document, score) tuples
+            top_k: Number of results to return
+
+        Returns:
+            Re-ranked (Document, score) tuples
+        """
+        query_lower = query.lower()
+        query_terms = set(query_lower.split())
+
+        scored_results = []
+        for doc, base_score in results:
+            content_lower = doc.page_content.lower()
+
+            # Relevance signals
+            relevance_score = 0.0
+
+            # 1. Base semantic similarity (normalized to 0-1, inverted for distance)
+            semantic_score = 1.0 / (1.0 + base_score)
+            relevance_score += semantic_score * 0.5
+
+            # 2. Query term coverage (how many query terms appear in doc)
+            term_matches = sum(1 for term in query_terms if term in content_lower)
+            term_coverage = term_matches / len(query_terms) if query_terms else 0
+            relevance_score += term_coverage * 0.2
+
+            # 3. Document length penalty (prefer moderate lengths)
+            doc_length = len(doc.page_content)
+            ideal_length = 800
+            length_score = 1.0 - min(abs(doc_length - ideal_length) / ideal_length, 1.0)
+            relevance_score += length_score * 0.1
+
+            # 4. Position of query terms (boost if terms appear early)
+            first_match_pos = min(
+                (content_lower.find(term) for term in query_terms if term in content_lower),
+                default=len(content_lower)
+            )
+            position_score = 1.0 - (first_match_pos / len(content_lower))
+            relevance_score += position_score * 0.1
+
+            # 5. Metadata relevance (boost for certain document types)
+            doc_type = doc.metadata.get('source_type', '')
+            if doc_type == 'pdf':  # Official docs are higher quality
+                relevance_score += 0.1
+
+            scored_results.append((doc, relevance_score))
+
+        # Sort by relevance score (descending) and return top_k
+        scored_results.sort(key=lambda x: x[1], reverse=True)
+        return scored_results[:top_k]
 
     def format_context(self, documents: List[Document]) -> str:
         """
