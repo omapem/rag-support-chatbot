@@ -1,0 +1,34 @@
+Kafka Producers and Consumers
+
+Producing Messages:
+Kafka producers send data to topics. Use kafka-console-producer.sh for testing:
+
+kafka-console-producer.sh --topic my-topic --bootstrap-server localhost:9092
+
+Producer Configuration:
+Key producer settings:
+- acks: Number of acknowledgments (0, 1, or all)
+- compression.type: Compression algorithm (none, gzip, snappy, lz4, zstd)
+- batch.size: Maximum batch size in bytes
+- linger.ms: Time to wait before sending batch
+
+Consuming Messages:
+Kafka consumers read data from topics. Use kafka-console-consumer.sh for testing:
+
+kafka-console-consumer.sh --topic my-topic --from-beginning --bootstrap-server localhost:9092
+
+Consumer Groups:
+- Consumer groups allow multiple consumers to work together
+- Each partition is consumed by exactly one consumer in a group
+- This enables parallel processing and scalability
+
+kafka-console-consumer.sh --topic my-topic --group my-consumer-group --bootstrap-server localhost:9092
+
+Managing Consumer Groups:
+View consumer group details:
+
+kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group my-consumer-group --describe
+
+Reset consumer group offsets:
+
+kafka-consumer-groups.sh --bootstrap-server localhost:9092 --group my-consumer-group --reset-offsets --to-earliest --topic my-topic --execute

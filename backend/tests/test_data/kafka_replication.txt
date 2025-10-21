@@ -1,0 +1,24 @@
+Kafka Replication and Fault Tolerance
+
+Replication Factor:
+The replication factor determines how many copies of each partition are maintained across the Kafka cluster. A replication factor of 3 means each partition has one leader and two follower replicas.
+
+Setting Replication Factor:
+When creating a topic, specify the replication factor:
+
+kafka-topics.sh --create --topic my-replicated-topic --bootstrap-server localhost:9092 --replication-factor 3
+
+Best Practices:
+- Use a replication factor of at least 3 for production environments
+- Replication factor cannot exceed the number of brokers in the cluster
+- Higher replication factors provide better fault tolerance but use more disk space
+
+Leader and Followers:
+- Each partition has one leader replica that handles all reads and writes
+- Follower replicas passively replicate the leader's data
+- If the leader fails, one follower is automatically elected as the new leader
+
+In-Sync Replicas (ISR):
+- ISR is the set of replicas that are fully caught up with the leader
+- Only in-sync replicas can be elected as leaders
+- Configure min.insync.replicas to ensure data durability

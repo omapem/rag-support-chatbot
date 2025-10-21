@@ -14,10 +14,13 @@ chromadb>=0.4.22
 langchain-chroma==0.2.6
 
 # Web Framework (Week 2)
-fastapi==0.109.0
+fastapi>=0.119.0
 uvicorn[standard]==0.27.0
 pydantic>=2.7.4,<3.0.0
 pydantic-settings>=2.4.0,<3.0.0
+slowapi==0.1.9
+python-multipart==0.0.6
+starlette>=0.48.0
 
 # Document Processing
 pypdf==3.17.4
@@ -36,6 +39,8 @@ streamlit==1.29.0
 pytest==7.4.3
 pytest-cov==4.1.0
 pytest-asyncio==0.21.1
+pytest-watch==4.2.0
+httpx>=0.28.1
 black==23.12.1
 flake8==7.0.0
 mypy==1.8.0

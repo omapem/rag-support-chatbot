@@ -101,12 +101,12 @@ rag-support-chatbot/
 - ✅ LLM integration
 - ✅ Streamlit UI
 
-### Week 2: Backend API
-- FastAPI endpoints
-- Conversation memory
-- Rate limiting
-- Testing
-- Documentation
+### Week 2: Backend API ✅
+- ✅ FastAPI endpoints
+- ✅ Conversation memory
+- ✅ Rate limiting
+- ✅ Testing (55 tests)
+- ✅ Documentation
 
 ### Week 3: Frontend
 - Next.js setup
@@ -124,20 +124,23 @@ rag-support-chatbot/
 
 ## 🔑 Key Features
 
-### Current (Week 1)
+### Current (Week 2)
 - ✅ PDF document processing
 - ✅ Web page scraping
 - ✅ Semantic search with Chroma
 - ✅ Claude-powered responses
 - ✅ Source citation
 - ✅ Simple chat interface
+- ✅ FastAPI REST endpoints
+- ✅ Conversation history tracking
+- ✅ Multi-turn context awareness
+- ✅ Hybrid search (semantic + keyword)
+- ✅ Rate limiting
 
 ### Planned
-- Conversation history tracking
-- Multi-turn context awareness
-- Hybrid search (semantic + keyword)
 - Streaming responses
 - Response quality metrics
+- Next.js frontend
 - Production deployment
 
 ## 🧪 Development Workflow
@@ -163,9 +166,17 @@ response = generator.generate_response("What is Kafka?")
 
 ### Running Tests
 ```bash
-pytest                              # Run all tests
-pytest --cov=src --cov-report=html  # With coverage
-pytest tests/test_retrieval.py -v   # Specific test file
+# Unit tests (fast)
+pytest tests/test_models.py tests/test_conversation_memory.py -v
+
+# Integration tests (slower, includes API tests)
+pytest tests/test_integration_api.py -v
+
+# All tests
+pytest
+
+# With coverage
+pytest --cov=app --cov=src --cov-report=html
 ```
 
 ### Code Quality

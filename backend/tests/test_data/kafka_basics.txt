@@ -1,0 +1,27 @@
+Apache Kafka Basics
+
+Apache Kafka is a distributed event streaming platform used by thousands of companies for high-performance data pipelines, streaming analytics, data integration, and mission-critical applications.
+
+Core Concepts:
+- Topics: Categories to which records are published
+- Producers: Applications that publish data to topics
+- Consumers: Applications that subscribe to topics and process data
+- Brokers: Kafka servers that store and serve data
+- Partitions: Topics are split into partitions for parallelism
+
+Creating a Kafka Topic:
+To create a new Kafka topic, use the kafka-topics.sh command-line tool:
+
+kafka-topics.sh --create --topic my-topic --bootstrap-server localhost:9092 --partitions 3 --replication-factor 2
+
+This creates a topic named "my-topic" with 3 partitions and a replication factor of 2.
+
+Listing Topics:
+To list all topics in your Kafka cluster:
+
+kafka-topics.sh --list --bootstrap-server localhost:9092
+
+Describing a Topic:
+To see details about a specific topic:
+
+kafka-topics.sh --describe --topic my-topic --bootstrap-server localhost:9092
